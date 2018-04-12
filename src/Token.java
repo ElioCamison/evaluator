@@ -10,21 +10,25 @@ public class Token {
 
     // Constructor privat. Evita que es puguin construir objectes Token externament
     // S'han de crear el objectes desde la mateixa classe
+    // S'han de crear el mètodes per comparar-ho
     private Token() {
     }
 
     // Torna un token de tipus "NUMBER"
     static Token tokNumber(int value) {
+        Token tkNumber = new Token();
         return null;
     }
 
     // Torna un token de tipus "OP"
     static Token tokOp(char c) {
+        Token tkOperador = new Token();
         return null;
     }
 
     // Torna un token de tipus "PAREN"
     static Token tokParen(char c) {
+        Token tkParen = new Token();
         return null;
     }
 
