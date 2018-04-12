@@ -1,14 +1,15 @@
 public class Token {
+
     enum Toktype {
         NUMBER, OP, PAREN
     }
 
-    // Pensa a implementar els "getters" d'aquests atributs
     private Toktype ttype;
     private int value;
     private char tk;
 
     // Constructor privat. Evita que es puguin construir objectes Token externament
+    // S'han de crear el objectes desde la mateixa classe
     private Token() {
     }
 
@@ -40,5 +41,22 @@ public class Token {
     // A partir d'un String, torna una llista de tokens
     public static Token[] getTokens(String expr) {
         return null;
+    }
+
+
+    // ***************************** //
+    //            GETTERS            //
+    // ***************************** //
+
+    public Toktype getTtype() {
+        return ttype;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public char getTk() {
+        return tk;
     }
 }
