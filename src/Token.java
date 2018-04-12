@@ -16,8 +16,10 @@ public class Token {
 
     // Torna un token de tipus "NUMBER"
     static Token tokNumber(int value) {
-        Token tkNumber = new Token();
-        return null;
+        Token t = new Token();
+        t.ttype = Toktype.NUMBER;
+        t.value = value;
+        return t;
     }
 
     // Torna un token de tipus "OP"
