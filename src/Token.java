@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Token {
@@ -42,34 +43,41 @@ public class Token {
         return t;
     }
 
-    // Mostra un token (conversió a String)
-    public String toString() {
-
-        return "";
-    }
-
     // Mètode equals. Comprova si dos objectes Token són iguals
     public boolean equals(Object o) {
-
-        return false;
+        if(o instanceof Token){
+            if (this.ttype==((Token) o).ttype){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     // A partir d'un String, torna una llista de tokens
     // Aquí rebem com a paràmetre un string amb anotació inversa; 1+311
     public static Token[] getTokens(String expr) {
-        char[] operador = new char[]{'+','-','*','/'};
-
-        List<String> list = new ArrayList();
+        Token[] arrayToken = new Token[expr.length()];
 
         for (int i = 0; i < expr.length(); i++) {
-            if (expr.charAt(i) == 'A') {
-
+            if (expr.charAt(i) == '+' || expr.charAt(i) == '-' || expr.charAt(i) == '*' || expr.charAt(i) == '/') {
+                arrayToken[i] = Token.tokOp(expr.charAt(i));
+            } else if (expr.charAt(i) == '(' || expr.charAt(i) == ')') {
+                arrayToken[i] = Token.tokParen(expr.charAt(i));
+            } else {
+                arrayToken[i] = Token.tokNumber(Integer.parseInt(String.valueOf(expr.charAt(i))));
+                //El correcte seria verificar que els caràcters que rebem siguin només números
+                // Revisar que no retorni un error, ja que es un char i no un int
             }
         }
+        return arrayToken;
+    }
 
-        list.add(expr);
-
-        return null;
+    @Override
+    public String toString() {
+        return "Token{" + "ttype=" + this.ttype + ", value=" + this.value + ", tk=" + this.tk + '}';
     }
 
 
