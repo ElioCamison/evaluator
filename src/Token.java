@@ -46,32 +46,56 @@ public class Token {
     // Mètode equals. Comprova si dos objectes Token són iguals
     public boolean equals(Object o) {
         if(o instanceof Token){
-            if (this.ttype==((Token) o).ttype){
-                return true;
-            } else {
-                return false;
+            Token t = (Token) o;
+            if (this.ttype==Toktype.NUMBER && this.ttype == t.ttype){
+                if (this.value == t.value) return true;
             }
-        } else {
-            return false;
+            if (this.ttype==Toktype.OP && this.ttype == t.ttype){
+                if (this.tk == t.tk) return true;
+            }
+            if (this.ttype==Toktype.PAREN && this.ttype == t.ttype){
+                if (this.tk == t.tk) return true;
+            }
+
         }
+        return false;
     }
 
     // A partir d'un String, torna una llista de tokens
     // Aquí rebem com a paràmetre un string amb anotació inversa; 1+311
     public static Token[] getTokens(String expr) {
-        Token[] arrayToken = new Token[expr.length()];
+        List<Token> listToken = new ArrayList();
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < expr.length(); i++) {
             if (expr.charAt(i) == '+' || expr.charAt(i) == '-' || expr.charAt(i) == '*' || expr.charAt(i) == '/') {
-                arrayToken[i] = Token.tokOp(expr.charAt(i));
+                if(!sb.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+                    sb.setLength(0);
+                }
+                listToken.add(Token.tokOp(expr.charAt(i)));
             } else if (expr.charAt(i) == '(' || expr.charAt(i) == ')') {
-                arrayToken[i] = Token.tokParen(expr.charAt(i));
-            } else {
-                arrayToken[i] = Token.tokNumber(Integer.parseInt(String.valueOf(expr.charAt(i))));
-                //El correcte seria verificar que els caràcters que rebem siguin només números
-                // Revisar que no retorni un error, ja que es un char i no un int
+                if(!sb.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+                    sb.setLength(0);
+                }
+                listToken.add(Token.tokParen(expr.charAt(i)));
+            } else if (expr.charAt(i) != '(' || expr.charAt(i) != ')' ||
+                    expr.charAt(i) != '+' || expr.charAt(i) != '-' || expr.charAt(i) != '*'
+                    || expr.charAt(i) != '/' && i != expr.length() ) {
+                sb.append(String.valueOf(expr.charAt(i)));
             }
         }
+        if(!sb.toString().equals("")){
+            listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+        }
+
+        Token[] arrayToken = new Token[listToken.size()];
+
+        for (int i = 0; i < listToken.size(); i++) {
+            arrayToken[i] = listToken.get(i);
+        }
+
         return arrayToken;
     }
 
