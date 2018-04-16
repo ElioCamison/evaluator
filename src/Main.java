@@ -4,7 +4,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        String proves = "((4/5)-6*(36+7))";
+        /*String proves = "1+311";
         List<Token> listToken = new ArrayList();
 
         StringBuilder sb = new StringBuilder();
@@ -36,9 +36,19 @@ public class Main {
 
         for (int i = 0; i < listToken.size(); i++) {
             arrayToken[i] = listToken.get(i);
+        }*/
+
+        Token[] tokens;
+
+        tokens = new Token[]{Token.tokNumber(3), Token.tokNumber(5), Token.tokOp('+')};
+
+        LinkedList<Token> linkedToken = new LinkedList();
+
+        for (int i = 0; i < tokens.length; i++) {
+            linkedToken.push(tokens[i]);
         }
 
-        System.out.println(Arrays.toString(arrayToken));
+        System.out.println(Arrays.toString(linkedToken.toArray()));
     }
 
 }
