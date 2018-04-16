@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,8 +23,21 @@ public class Evaluator {
         for (int i = 0; i < list.length; i++) {
             linkedToken.push(list[i]);
         }
+
+        Iterator it = linkedToken.iterator();
+        int sum = 0;
+        int rest = 0;
+        while (it.hasNext()){
+            if(linkedToken.pop().equals(Token.tokOp('+'))) {
+                sum += linkedToken.poll().getValue();
+                sum += linkedToken.poll().getValue();
+            }else if (linkedToken.pop().equals(Token.tokOp('-'))){
+                rest -= linkedToken.poll().getValue();
+                rest -= linkedToken.poll().getValue();
+            }
+        }
         // Calcula el valor resultant d'avaluar la llista de tokens
-        return 0;
+        return sum;
         
     }
 
