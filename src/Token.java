@@ -68,6 +68,13 @@ public class Token {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < expr.length(); i++) {
+            if(expr.charAt(i) == ' '){
+                if(!sb.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+                    sb.setLength(0);
+                }
+                continue;
+            }
             if (expr.charAt(i) == '+' || expr.charAt(i) == '-' || expr.charAt(i) == '*' || expr.charAt(i) == '/') {
                 if(!sb.toString().equals("")){
                     listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));

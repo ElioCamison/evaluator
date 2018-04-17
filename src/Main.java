@@ -4,12 +4,19 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        /*String proves = "1+311";
+        /*String proves = "1 2 20 5 - * +";
         List<Token> listToken = new ArrayList();
 
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < proves.length(); i++) {
+            if(proves.charAt(i) == ' '){
+                if(!sb.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+                    sb.setLength(0);
+                }
+                continue;
+            }
             if (proves.charAt(i) == '+' || proves.charAt(i) == '-' || proves.charAt(i) == '*' || proves.charAt(i) == '/') {
                 if(!sb.toString().equals("")){
                     listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
@@ -36,19 +43,42 @@ public class Main {
 
         for (int i = 0; i < listToken.size(); i++) {
             arrayToken[i] = listToken.get(i);
-        }*/
+        }
+        System.out.println(Arrays.toString(arrayToken));*/
 
-        Token[] tokens;
+        Token[] list;
 
-        tokens = new Token[]{Token.tokNumber(3), Token.tokNumber(5), Token.tokOp('+')};
+        list = Token.getTokens("1 2 20 5 - * +");;
 
-        LinkedList<Token> linkedToken = new LinkedList();
+        LinkedList<Integer> stack = new LinkedList();
 
-        for (int i = 0; i < tokens.length; i++) {
-            linkedToken.push(tokens[i]);
+        for(Token t : list) {
+            if (t.getTtype() == Token.Toktype.NUMBER) {
+                stack.push(t.getValue());
+            } else if (t.getTtype() == Token.Toktype.OP){
+                int n1 = stack.pop();
+                int n2 = stack.pop();
+                char tk = t.getTk();
+                if (tk == '+') {
+                    stack.push(n1 + n2);
+                } else if (tk == '-') {
+                    if (n1 < n2){
+                        stack.push(n2 - n1);
+                    } else {
+                        stack.push(n1 - n2);
+                    }
+                } else if (tk == '*') {
+                    stack.push(n1 * n2);
+                } else if (tk == '/') {
+                    stack.push(n1 / n2);
+                }
+            }
         }
 
-        System.out.println(Arrays.toString(linkedToken.toArray()));
+        System.out.println(stack.pop());
+
+        // Recorrem la pila per treure tots el números.
+
     }
 
 }

@@ -18,26 +18,33 @@ public class Evaluator {
     }
 
     public static int calcRPN(Token[] list) {
-        LinkedList<Token> linkedToken = new LinkedList();
+        LinkedList<Integer> stack = new LinkedList();
 
-        for (int i = 0; i < list.length; i++) {
-            linkedToken.push(list[i]);
-        }
-
-        Iterator it = linkedToken.iterator();
-        int sum = 0;
-        int rest = 0;
-        while (it.hasNext()){
-            if(linkedToken.pop().equals(Token.tokOp('+'))) {
-                sum += linkedToken.poll().getValue();
-                sum += linkedToken.poll().getValue();
-            }else if (linkedToken.pop().equals(Token.tokOp('-'))){
-                rest -= linkedToken.poll().getValue();
-                rest -= linkedToken.poll().getValue();
+        for(Token t : list) {
+            if (t.getTtype() == Token.Toktype.NUMBER) {
+                stack.push(t.getValue());
+            } else if (t.getTtype() == Token.Toktype.OP){
+                int n1 = stack.pop();
+                int n2 = stack.pop();
+                char tk = t.getTk();
+                if (tk == '+') {
+                    stack.push(n1 + n2);
+                } else if (tk == '-') {
+                    if (n1 < n2){
+                        stack.push(n2 - n1);
+                    } else {
+                        stack.push(n1 - n2);
+                    }
+                } else if (tk == '*') {
+                    stack.push(n1 * n2);
+                } else if (tk == '/') {
+                    stack.push(n1 / n2);
+                }
             }
         }
+
         // Calcula el valor resultant d'avaluar la llista de tokens
-        return sum;
+        return stack.pop();
         
     }
 
