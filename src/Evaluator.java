@@ -32,7 +32,6 @@ public class Evaluator {
             calc.add(stack.pop());
         }
 
-        System.out.println(calc);
         Token[] arrayTokens = new Token[calc.size()];
 
         for (int i = 0; i < calc.size(); i++) {

@@ -80,7 +80,7 @@ public class Main {
         /* ****************** */
 
         // últim mètode.
-        String expr = "2+3";
+        String expr = "100/2/6";
         // Llista per emmagatzemar es valors finals
         List<Token> calc = new ArrayList();
         // Pila per emmagatzemar operadors
