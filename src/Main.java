@@ -82,9 +82,9 @@ public class Main {
         // últim mètode.
         String expr = "2+3";
         // Llista per emmagatzemar es valors finals
-        List<String> calc = new ArrayList();
+        List<Token> calc = new ArrayList();
         // Pila per emmagatzemar operadors
-        LinkedList<String> stack = new LinkedList();
+        LinkedList<Token> stack = new LinkedList();
 
         // ********************************************* //
         // Convertim l'string d'entrada en una llista de tokens
@@ -95,29 +95,28 @@ public class Main {
         // Recorrem l'array de tokens
         for (int i = 0; i < tokens.length; i++) {
             if(tokens[i].getTtype() == Token.Toktype.OP){
-                stack.push(String.valueOf(tokens[i].getTk()));
-            } else if (tokens[i].getTtype() == Token.Toktype.PAREN){
-                stack.push(String.valueOf(tokens[i].getTk()));
+                // TODO: Treure si fa falta els operadors amb manco o igual prioritat
+                stack.push(tokens[i]);
             } else {
-                calc.add(String.valueOf(tokens[i].getValue()));
+                calc.add(tokens[i]);
             }
         }
 
-        if (!stack.isEmpty()){
-            calc.add(stack.getFirst());
+        while (!stack.isEmpty()){
+            calc.add(stack.pop());
         }
 
-        Token[] t = new Token[calc.size()];
+        System.out.println(calc);
+        Token[] arrayTokens = new Token[calc.size()];
 
         for (int i = 0; i < calc.size(); i++) {
-            t = Token.getTokens(calc.get(i));
+            arrayTokens[i] = calc.get(i);
         }
 
-        System.out.println(Arrays.toString(t));
-
         // Finalment, crida a calcRPN amb la nova llista de tokens i torna el resultat
-        int result = Evaluator.calcRPN(t);
+        int result = Evaluator.calcRPN(arrayTokens);
 
+        System.out.println(result);
 
     }
 

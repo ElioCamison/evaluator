@@ -30,9 +30,9 @@ public class EvaluatorTest {
     @Test
     public void tests_2_operands() {
         assertEquals(5, Evaluator.calculate("2+3"));
-        /*assertEquals(14, Evaluator.calculate("2*7"));
+        assertEquals(14, Evaluator.calculate("2*7"));
         assertEquals(-15, Evaluator.calculate("46-61"));
-        assertEquals(10, Evaluator.calculate("32/3"));*/
+        assertEquals(10, Evaluator.calculate("32/3"));
     }
 
     @Test
