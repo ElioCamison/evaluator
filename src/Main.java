@@ -46,7 +46,7 @@ public class Main {
         }
         System.out.println(Arrays.toString(arrayToken));*/
 
-        Token[] list;
+        /*Token[] list;
 
         list = Token.getTokens("1 2 20 5 - * +");;
 
@@ -75,9 +75,49 @@ public class Main {
             }
         }
 
-        System.out.println(stack.pop());
+        System.out.println(stack.pop());*/
 
-        // Recorrem la pila per treure tots el números.
+        /* ****************** */
+
+        // últim mètode.
+        String expr = "2+3";
+        // Llista per emmagatzemar es valors finals
+        List<String> calc = new ArrayList();
+        // Pila per emmagatzemar operadors
+        LinkedList<String> stack = new LinkedList();
+
+        // ********************************************* //
+        // Convertim l'string d'entrada en una llista de tokens
+        Token[] tokens = Token.getTokens(expr);
+        // ********************************************* //
+        // Efectua el procediment per convertir la llista de tokens en notació RPN
+
+        // Recorrem l'array de tokens
+        for (int i = 0; i < tokens.length; i++) {
+            if(tokens[i].getTtype() == Token.Toktype.OP){
+                stack.push(String.valueOf(tokens[i].getTk()));
+            } else if (tokens[i].getTtype() == Token.Toktype.PAREN){
+                stack.push(String.valueOf(tokens[i].getTk()));
+            } else {
+                calc.add(String.valueOf(tokens[i].getValue()));
+            }
+        }
+
+        if (!stack.isEmpty()){
+            calc.add(stack.getFirst());
+        }
+
+        Token[] t = new Token[calc.size()];
+
+        for (int i = 0; i < calc.size(); i++) {
+            t = Token.getTokens(calc.get(i));
+        }
+
+        System.out.println(Arrays.toString(t));
+
+        // Finalment, crida a calcRPN amb la nova llista de tokens i torna el resultat
+        int result = Evaluator.calcRPN(t);
+
 
     }
 
