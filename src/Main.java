@@ -94,7 +94,7 @@ public class Main {
 
         // Recorrem l'array de tokens
         for (int i = 0; i < tokens.length; i++) {
-            if(tokens[i].getTtype() == Token.Toktype.OP){
+            if (tokens[i].getTtype() == Token.Toktype.OP) {
                 // TODO: Treure si fa falta els operadors amb manco o igual prioritat
                 stack.push(tokens[i]);
             } else {
@@ -102,7 +102,7 @@ public class Main {
             }
         }
 
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             calc.add(stack.pop());
         }
 
