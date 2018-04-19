@@ -20,18 +20,23 @@ public class Evaluator {
 
         // Recorrem l'array de tokens
         for (int i = 0; i < tokens.length; i++) {
-            if(tokens[i].getTtype() == Token.Toktype.OP){
+            if (tokens[i].getTtype() == Token.Toktype.OP) {
                 // TODO: Treure si fa falta els operadors amb manco o igual prioritat
-                stack.push(tokens[i]);
+                if(stack.isEmpty()){
+                    stack.push(tokens[i]);
+                } else {
+                    calc.add(tokens[i]);
+                }
             } else {
                 calc.add(tokens[i]);
             }
         }
 
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             calc.add(stack.pop());
         }
 
+        System.out.println(calc);
         Token[] arrayTokens = new Token[calc.size()];
 
         for (int i = 0; i < calc.size(); i++) {
@@ -57,7 +62,7 @@ public class Evaluator {
                 if (tk == '+') {
                     stack.push(n1 + n2);
                 } else if (tk == '-') {
-                    if (n1 < n2){
+                    if(n1 < n2){
                         stack.push(n2 - n1);
                     } else {
                         stack.push(n1 - n2);
@@ -65,7 +70,11 @@ public class Evaluator {
                 } else if (tk == '*') {
                     stack.push(n1 * n2);
                 } else if (tk == '/') {
-                    stack.push(n1 / n2);
+                    if(n1 < n2){
+                        stack.push(n2 / n1);
+                    } else {
+                        stack.push(n1 / n2);
+                    }
                 }
             }
         }

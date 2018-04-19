@@ -96,7 +96,11 @@ public class Main {
         for (int i = 0; i < tokens.length; i++) {
             if (tokens[i].getTtype() == Token.Toktype.OP) {
                 // TODO: Treure si fa falta els operadors amb manco o igual prioritat
-                stack.push(tokens[i]);
+                if(stack.isEmpty()){
+                    stack.push(tokens[i]);
+                } else {
+                    calc.add(tokens[i]);
+                }
             } else {
                 calc.add(tokens[i]);
             }
