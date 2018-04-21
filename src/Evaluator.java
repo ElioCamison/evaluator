@@ -52,33 +52,31 @@ public class Evaluator {
     public static int calcRPN(Token[] list) {
         LinkedList<Integer> stack = new LinkedList();
 
-        for(Token t : list) {
+        for (Token t : list) {
             if (t.getTtype() == Token.Toktype.NUMBER) {
                 stack.push(t.getValue());
-            } else if (t.getTtype() == Token.Toktype.OP){
+            } else if (t.getTtype() == Token.Toktype.OP) {
+
                 int n1 = stack.pop();
                 int n2 = stack.pop();
                 char tk = t.getTk();
-                if (tk == '+') {
-                    stack.push(n1 + n2);
-                } else if (tk == '-') {
-                    if(n1 < n2){
+
+                switch (tk) {
+                    case '+':
+                        stack.push(n2 + n1);
+                        break;
+                    case '-':
                         stack.push(n2 - n1);
-                    } else {
-                        stack.push(n1 - n2);
-                    }
-                } else if (tk == '*') {
-                    stack.push(n1 * n2);
-                } else if (tk == '/') {
-                    if(n1 < n2){
+                        break;
+                    case '*':
+                        stack.push(n2 * n1);
+                        break;
+                    case '/':
                         stack.push(n2 / n1);
-                    } else {
-                        stack.push(n1 / n2);
-                    }
+                        break;
                 }
             }
         }
-
         // Calcula el valor resultant d'avaluar la llista de tokens
         return stack.pop();
         
