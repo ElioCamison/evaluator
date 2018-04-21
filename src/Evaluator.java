@@ -8,7 +8,7 @@ public class Evaluator {
 
     public static int calculate(String expr) {
         // Llista per emmagatzemar es valors finals
-        List<Token> calc = new ArrayList();
+        LinkedList<Token> calc = new LinkedList();
         // Pila per emmagatzemar operadors
         LinkedList<Token> stack = new LinkedList();
 
@@ -20,16 +20,34 @@ public class Evaluator {
 
         // Recorrem l'array de tokens
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].getTtype() == Token.Toktype.OP) {
-                // TODO: Treure si fa falta els operadors amb manco o igual prioritat
-                if(stack.isEmpty()){
-                    stack.push(tokens[i]);
-                } else {
-                    calc.add(tokens[i]);
-                }
-            } else {
-                calc.add(tokens[i]);
+
+            if (tokens[i].getTtype() == Token.Toktype.NUMBER) {
+                calc.push(tokens[i]);
             }
+
+            if (tokens[i].getTtype() == Token.Toktype.OP) {
+
+                if (stack.isEmpty()) {
+                    stack.push(tokens[i]);
+                    continue;
+                }
+
+
+                if (definePriority(stack.peek().getTk()) < definePriority(tokens[i].getTk())) {
+                    stack.push(tokens[i]);
+                    continue;
+                }
+
+                while (!stack.isEmpty() && definePriority(stack.peek().getTk()) >= definePriority(tokens[i].getTk()))calc.add(stack.pop());
+                stack.push(tokens[i]);
+                continue;
+
+            }
+
+            if (tokens[i].getTtype() == Token.Toktype.PAREN) {
+                continue;
+            }
+
         }
 
         while (!stack.isEmpty()) {
@@ -63,23 +81,36 @@ public class Evaluator {
 
                 switch (tk) {
                     case '+':
-                        stack.push(n2 + n1);
+                        stack.push(n1 + n2);
                         break;
                     case '-':
-                        stack.push(n2 - n1);
+                        stack.push(n1 - n2);
                         break;
                     case '*':
-                        stack.push(n2 * n1);
+                        stack.push(n1 * n2);
                         break;
                     case '/':
-                        stack.push(n2 / n1);
+                        stack.push(n1 / n2);
                         break;
                 }
             }
         }
         // Calcula el valor resultant d'avaluar la llista de tokens
         return stack.pop();
-        
+    }
+
+    private static int definePriority(char operador) {
+        switch (operador) {
+            case '+':
+                return 1;
+            case '-':
+                return 1;
+            case '*':
+                return 2;
+            case '/':
+                return 2;
+        }
+        return 0;
     }
 
 

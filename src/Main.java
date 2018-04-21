@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
 
@@ -80,9 +81,9 @@ public class Main {
         /* ****************** */
 
         // últim mètode.
-        String expr = "100/2/6";
+        String expr = "46-61";
         // Llista per emmagatzemar es valors finals
-        List<Token> calc = new ArrayList();
+        LinkedList<Token> calc = new LinkedList();
         // Pila per emmagatzemar operadors
         LinkedList<Token> stack = new LinkedList();
 
@@ -94,16 +95,33 @@ public class Main {
 
         // Recorrem l'array de tokens
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].getTtype() == Token.Toktype.OP) {
-                // TODO: Treure si fa falta els operadors amb manco o igual prioritat
-                if(stack.isEmpty()){
-                    stack.push(tokens[i]);
-                } else {
-                    calc.add(tokens[i]);
-                }
-            } else {
-                calc.add(tokens[i]);
+
+            if (tokens[i].getTtype() == Token.Toktype.NUMBER) {
+                calc.push(tokens[i]);
             }
+
+            if (tokens[i].getTtype() == Token.Toktype.OP) {
+
+                if (stack.isEmpty()) {
+                    stack.push(tokens[i]);
+                    continue;
+                }
+
+                if (definePriority(stack.peek().getTk()) < definePriority(tokens[i].getTk())) {
+                    stack.push(tokens[i]);
+                    continue;
+                }
+
+                while (!stack.isEmpty() && definePriority(stack.peek().getTk()) >= definePriority(tokens[i].getTk()))calc.add(stack.pop());
+                stack.push(tokens[i]);
+                continue;
+
+            }
+
+            if (tokens[i].getTtype() == Token.Toktype.PAREN) {
+
+            }
+
         }
 
         while (!stack.isEmpty()) {
@@ -117,11 +135,59 @@ public class Main {
             arrayTokens[i] = calc.get(i);
         }
 
+        System.out.println(Arrays.toString(arrayTokens));
+
         // Finalment, crida a calcRPN amb la nova llista de tokens i torna el resultat
-        int result = Evaluator.calcRPN(arrayTokens);
+        int result =calcRPN(arrayTokens);
 
         System.out.println(result);
-
     }
 
+
+    public static int calcRPN(Token[] list) {
+        LinkedList<Integer> stack = new LinkedList();
+
+        for (Token t : list) {
+            if (t.getTtype() == Token.Toktype.NUMBER) {
+                stack.push(t.getValue());
+            } else if (t.getTtype() == Token.Toktype.OP) {
+
+                int n1 = stack.pop();
+                int n2 = stack.pop();
+                char tk = t.getTk();
+
+                switch (tk) {
+                    case '+':
+                        stack.push(n1 + n2);
+                        break;
+                    case '-':
+                        stack.push(n1 - n2);
+                        break;
+                    case '*':
+                        stack.push(n1 * n2);
+                        break;
+                    case '/':
+                        stack.push(n1 / n2);
+                        break;
+                }
+            }
+        }
+        // Calcula el valor resultant d'avaluar la llista de tokens
+        return stack.pop();
+    }
+
+
+    private static int definePriority(char operador) {
+        switch (operador) {
+            case '+':
+                return 1;
+            case '-':
+                return 1;
+            case '*':
+                return 2;
+            case '/':
+                return 2;
+        }
+        return 0;
+    }
 }
