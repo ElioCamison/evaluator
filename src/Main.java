@@ -90,6 +90,8 @@ public class Main {
         // ********************************************* //
         // Convertim l'string d'entrada en una llista de tokens
         Token[] tokens = Token.getTokens(expr);
+
+        System.out.println(Arrays.toString(tokens));
         // ********************************************* //
         // Efectua el procediment per convertir la llista de tokens en notació RPN
 
@@ -112,14 +114,23 @@ public class Main {
                     continue;
                 }
 
-                while (!stack.isEmpty() && definePriority(stack.peek().getTk()) >= definePriority(tokens[i].getTk()))calc.add(stack.pop());
-                stack.push(tokens[i]);
-                continue;
-
+                while (!stack.isEmpty() && definePriority(stack.peek().getTk()) >= definePriority(tokens[i].getTk())) {
+                    calc.add(stack.pop());
+                    stack.push(tokens[i]);
+                    break;
+                }
             }
 
             if (tokens[i].getTtype() == Token.Toktype.PAREN) {
+                if (tokens[i].getTk() == '(') {
+                    stack.push(tokens[i]);
+                } else {
+                    while (stack.peek().getTk() != '(') {
+                        calc.add(stack.pop());
+                    }
 
+                    stack.pop();
+                }
             }
 
         }
@@ -128,7 +139,7 @@ public class Main {
             calc.add(stack.pop());
         }
 
-        System.out.println(calc);
+
         Token[] arrayTokens = new Token[calc.size()];
 
         for (int i = 0; i < calc.size(); i++) {
@@ -138,7 +149,7 @@ public class Main {
         System.out.println(Arrays.toString(arrayTokens));
 
         // Finalment, crida a calcRPN amb la nova llista de tokens i torna el resultat
-        int result =calcRPN(arrayTokens);
+        int result = calcRPN(arrayTokens);
 
         System.out.println(result);
     }
@@ -152,8 +163,8 @@ public class Main {
                 stack.push(t.getValue());
             } else if (t.getTtype() == Token.Toktype.OP) {
 
-                int n1 = stack.pop();
                 int n2 = stack.pop();
+                int n1 = stack.pollFirst();
                 char tk = t.getTk();
 
                 switch (tk) {
@@ -167,8 +178,12 @@ public class Main {
                         stack.push(n1 * n2);
                         break;
                     case '/':
-                        stack.push(n1 / n2);
+                        if (n1 == 0 || n2 == 0)
+                            stack.push(0);
+                        else
+                            stack.push(n1 / n2);
                         break;
+
                 }
             }
         }

@@ -46,8 +46,11 @@ public class Token {
     // Mètode equals. Comprova si dos objectes Token són iguals
     public boolean equals(Object o) {
         if(o instanceof Token){
+            // Feim un casting de l'objecte que rebem per paràmetre
             Token t = (Token) o;
+            // Comprovam que siguin del mateix tipus
             if (this.ttype==Toktype.NUMBER && this.ttype == t.ttype){
+                //Comprovam que tenguin el mateix valor, i retornam verdader.
                 if (this.value == t.value) return true;
             }
             if (this.ttype==Toktype.OP && this.ttype == t.ttype){
@@ -58,6 +61,7 @@ public class Token {
             }
 
         }
+        // En cas contrari, tornam fals.
         return false;
     }
 
@@ -65,40 +69,48 @@ public class Token {
     // Aquí rebem com a paràmetre un string amb anotació inversa; 1+311
     public static Token[] getTokens(String expr) {
         List<Token> listToken = new ArrayList();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder valuesToken = new StringBuilder();
 
         for (int i = 0; i < expr.length(); i++) {
+            // Comprovam que no hagui espais
             if(expr.charAt(i) == ' '){
-                if(!sb.toString().equals("")){
-                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
-                    sb.setLength(0);
+                if(!valuesToken.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(valuesToken.toString())));
+                    // Esborram tot lo que contengui la variable sb
+                    valuesToken.setLength(0);
                 }
                 continue;
             }
+            // Comprovam si el caracter que esteim iterant és un operador
             if (expr.charAt(i) == '+' || expr.charAt(i) == '-' || expr.charAt(i) == '*' || expr.charAt(i) == '/') {
-                if(!sb.toString().equals("")){
-                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
-                    sb.setLength(0);
+                // Comprovam que no hagui espais
+                if(!valuesToken.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(valuesToken.toString())));
+                    valuesToken.setLength(0);
                 }
+                // Afegim dins es contendidor el objecte Token de tipus operador
                 listToken.add(Token.tokOp(expr.charAt(i)));
             } else if (expr.charAt(i) == '(' || expr.charAt(i) == ')') {
-                if(!sb.toString().equals("")){
-                    listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
-                    sb.setLength(0);
+                if(!valuesToken.toString().equals("")){
+                    listToken.add(Token.tokNumber(Integer.parseInt(valuesToken.toString())));
+                    valuesToken.setLength(0);
                 }
+                // Afegim dins es contendidor el objecte Token de tipus parèntesis
                 listToken.add(Token.tokParen(expr.charAt(i)));
             } else if (expr.charAt(i) != '(' || expr.charAt(i) != ')' ||
                     expr.charAt(i) != '+' || expr.charAt(i) != '-' || expr.charAt(i) != '*'
                     || expr.charAt(i) != '/' && i != expr.length() ) {
-                sb.append(String.valueOf(expr.charAt(i)));
+                valuesToken.append(String.valueOf(expr.charAt(i)));
             }
         }
-        if(!sb.toString().equals("")){
-            listToken.add(Token.tokNumber(Integer.parseInt(sb.toString())));
+        if(!valuesToken.toString().equals("")){
+            listToken.add(Token.tokNumber(Integer.parseInt(valuesToken.toString())));
         }
 
+        // Cream un array de tokens, amb la mida del contenidor que hem emprat
         Token[] arrayToken = new Token[listToken.size()];
 
+        // Omplim l'array de tokens
         for (int i = 0; i < listToken.size(); i++) {
             arrayToken[i] = listToken.get(i);
         }
